@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
-
+import restaurantBg from '../assets/img.webp';
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
@@ -22,8 +22,16 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f0] flex items-center justify-center px-4">
-      <div className="bg-white p-8 rounded-lg shadow-sm w-full max-w-md">
+    <div
+      className="min-h-screen flex items-center justify-center px-4 relative"
+      style={{
+        backgroundImage: `url(${restaurantBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className="absolute inset-0 bg-black/55" />
+      <div className="relative z-10 bg-white/95 p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-xl font-semibold text-gray-800 mb-1">Restaurant Reservations</h2>
         <p className="text-sm text-gray-500 mb-6">Sign in to your account</p>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
