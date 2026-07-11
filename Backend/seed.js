@@ -5,12 +5,12 @@ require('dotenv').config();
 const tables = [
   { tableNumber: 1, capacity: 2 },
   { tableNumber: 2, capacity: 2 },
-  { tableNumber: 3, capacity: 4 },
+  { tableNumber: 3, capacity: 3 },
   { tableNumber: 4, capacity: 4 },
-  { tableNumber: 5, capacity: 6 },
-  { tableNumber: 6, capacity: 6 },
-  { tableNumber: 7, capacity: 8 },
-  { tableNumber: 8, capacity: 8 },
+  { tableNumber: 5, capacity: 4 },
+  { tableNumber: 6, capacity: 5 },
+  { tableNumber: 7, capacity: 6 },
+  { tableNumber: 8, capacity: 6 },
 ];
 
 const seed = async () => {
