@@ -17,6 +17,7 @@ const AdminDashboard = () => {
     const [reservations, setReservations] = useState([]);
     const [tables, setTables] = useState([]);
     const [dateFilter, setDateFilter] = useState('');
+    const [tableDate, setTableDate] = useState(() => new Date().toISOString().split('T')[0]);
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({});
     const [error, setError] = useState('');
@@ -131,18 +132,25 @@ const AdminDashboard = () => {
                                     <p className={`text-xs mt-0.5 ${subtext}`}>Administrator</p>
                                 </div>
                                 <div className="py-1">
-                                    <button className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-50'}`}>
-                                        Settings
+                                    <button
+                                        onClick={toggleTheme}
+                                        className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-50'}`}
+                                    >
+                                        <span>{isDark ? '☀️' : '🌙'}</span>
+                                        {isDark ? 'Light Mode' : 'Dark Mode'}
                                     </button>
                                     <button className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-50'}`}>
-                                        Help
+                                        <span>⚙️</span> Settings
+                                    </button>
+                                    <button className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-50'}`}>
+                                        <span>❓</span> Help
                                     </button>
                                     <div className={`border-t my-1 ${border}`} />
                                     <button
                                         onClick={handleLogout}
                                         className="w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 text-red-500 hover:bg-red-50"
                                     >
-                                        Logout
+                                        <span>🚪</span> Logout
                                     </button>
                                 </div>
                             </div>
@@ -263,17 +271,36 @@ const AdminDashboard = () => {
 
                 {activeTab === 'tables' && (
                     <div className={`${card} rounded-lg p-6 shadow-sm`}>
-                        <h3 className="text-base font-semibold mb-5">Restaurant Tables</h3>
+                        <div className="flex justify-between items-center mb-5">
+                            <h3 className="text-base font-semibold">Restaurant Tables</h3>
+                            <div className="flex items-center gap-2">
+                                <label className={`text-xs ${subtext}`}>Check availability for</label>
+                                <input
+                                    type="date"
+                                    value={tableDate}
+                                    onChange={e => setTableDate(e.target.value)}
+                                    className={inputCls}
+                                />
+                            </div>
+                        </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {tables.map(t => (
-                                <div key={t._id} className={`rounded-lg p-4 border ${border} ${isDark ? 'bg-[#1e1e2e]' : 'bg-gray-50'}`}>
-                                    <div className="text-lg font-semibold mb-1">Table {t.tableNumber}</div>
-                                    <div className={`text-sm ${subtext}`}>{t.capacity} seats</div>
-                                    <div className="mt-2">
-                                        <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-600">active</span>
+                            {tables.map(t => {
+                                const isBooked = reservations.some(
+                                    r => r.table?._id === t._id && r.date === tableDate && r.status === 'active'
+                                );
+                                return (
+                                    <div
+                                        key={t._id}
+                                        className={`rounded-lg p-4 border ${isDark ? 'bg-[#1e1e2e]' : 'bg-gray-50'} ${isBooked ? 'border-red-400' : 'border-green-400'}`}
+                                    >
+                                        <div className="text-lg font-semibold mb-1">Table {t.tableNumber}</div>
+                                        <div className={`text-sm ${subtext} mb-2`}>{t.capacity} seats</div>
+                                        <span className={`text-xs px-2 py-0.5 rounded-full ${isBooked ? 'bg-red-100 text-red-500' : 'bg-green-100 text-green-600'}`}>
+                                            {isBooked ? 'booked' : 'vacant'}
+                                        </span>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
                 )}
