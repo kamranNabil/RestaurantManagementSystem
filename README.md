@@ -122,6 +122,5 @@ npm run dev
 
 ## 📄 License
 
-Distributed under the ISC License.
-
+Distributed under the [ISC License](LICENSE).
 ```
