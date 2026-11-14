@@ -22,6 +22,7 @@ const register = async (req, res) => {
 
     res.status(201).json({ token: generateToken(user), role: user.role, name: user.name });
   } catch (err) {
+    console.error("Auth error:", err);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -38,6 +39,7 @@ const login = async (req, res) => {
 
     res.json({ token: generateToken(user), role: user.role, name: user.name });
   } catch (err) {
+    console.error("Auth error:", err);
     res.status(500).json({ message: 'Server error' });
   }
 };
