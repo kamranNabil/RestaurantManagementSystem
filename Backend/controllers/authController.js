@@ -12,13 +12,13 @@ const generateToken = (user) => {
 
 const register = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;   // role is no longer read from the client
 
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'Email already in use' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword, role });
+    const user = await User.create({ name, email, password: hashedPassword });   // role defaults to 'customer'
 
     res.status(201).json({ token: generateToken(user), role: user.role, name: user.name });
   } catch (err) {
